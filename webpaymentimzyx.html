@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMZYY STORE - Jasteb & Panel Murah</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+        
+        /* Loading Animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            color: white;
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            animation: pulse 8s infinite linear;
+        }
+        
+        @keyframes pulse {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .logo::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: white;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        .tagline {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        /* Navigation */
+        nav {
+            background-color: white;
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        
+        .nav-item {
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        
+        .section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 3px;
+        }
+        
+        /* Product Cards */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 1px solid #eee;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .product-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .product-body {
+            padding: 1.5rem;
+        }
+        
+        .product-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+        
+        .product-features li {
+            padding: 0.3rem 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .product-features li i {
+            margin-right: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #5a4bcf;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        /* Calculator */
+        .calculator {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .calculator-title {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .calculator-input {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        
+        .calculator-input input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px 0 0 5px;
+            font-size: 1rem;
+        }
+        
+        .calculator-input select {
+            padding: 0 1rem;
+            border: 1px solid #ddd;
+            border-left: none;
+            border-radius: 0 5px 5px 0;
+            background-color: white;
+            cursor: pointer;
+        }
+        
+        .calculator-result {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+            border: 1px solid #eee;
+        }
+        
+        .calculator-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .btn-secondary {
+            background-color: #f1f1f1;
+            color: var(--dark);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e1e1e1;
+        }
+        
+        /* Payment Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            padding: 2rem;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            color: var(--danger);
+        }
+        
+        .modal-title {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .payment-method {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 0.8rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-method:hover, .payment-method.active {
+            border-color: var(--primary);
+            background-color: rgba(108, 92, 231, 0.05);
+        }
+        
+        .payment-method i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .payment-method.active i {
+            color: var(--success);
+        }
+        
+        .payment-qr {
+            text-align: center;
+            margin: 1.5rem 0;
+            display: none;
+        }
+        
+        .payment-qr.active {
+            display: block;
+        }
+        
+        .payment-qr img {
+            max-width: 200px;
+            margin: 0 auto;
+            border: 1px solid #eee;
+            padding: 0.5rem;
+            background-color: white;
+        }
+        
+        .payment-instruction {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        
+        .footer-contact {
+            margin: 1.5rem 0;
+        }
+        
+        .contact-item {
+            display: inline-flex;
+            align-items: center;
+            margin: 0 1rem;
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .contact-item:hover {
+            color: white;
+        }
+        
+        .contact-item i {
+            margin-right: 0.5rem;
+        }
+        
+        .footer-copyright {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .payment-methods {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* Special Offer Badge */
+        .special-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: var(--danger);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transform: rotate(15deg);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: rotate(15deg) scale(1); }
+            50% { transform: rotate(15deg) scale(1.05); }
+            100% { transform: rotate(15deg) scale(1); }
+        }
+        
+        /* Floating WhatsApp */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 100;
+            transition: all 0.3s ease;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        /* Tab System */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 1.5rem;
+        }
+        
+        .tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .tab:hover {
+            color: var(--primary);
+        }
+        
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading IMZYY Store...</div>
+    </div>
+    
+    <!-- Header -->
+    <header>
+        <div class="logo">IMZYY STORE</div>
+        <div class="tagline">Jasteb & Panel Murah Berkualitas</div>
+    </header>
+    
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="nav-item active" data-tab="jasteb">JASTEB</div>
+            <div class="nav-item" data-tab="unchek">UNCHEK</div>
+            <div class="nav-item" data-tab="panel">PANEL</div>
+            <div class="nav-item" data-tab="vps">VPS</div>
+            <div class="nav-item" data-tab="reseller">RESELLER</div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Jasteb Section -->
+        <div class="section tab-content active" id="jasteb">
+            <h2 class="section-title">JASTEB MURAH</h2>
+            <div class="products-grid">
+                <!-- Jasteb Products -->
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">1K JASTEB</div>
+                        <div class="product-price">Rp 1.000</div>
+                    </div>
+                    <div class="product-body">
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> 50 RESS+</li>
+                            <li><i class="fas fa-check-circle"></i> Fresh Account</li>
+                            <li><i class="fas fa-check-circle"></i> Garansi 1x Replace</li>
+                        </ul>
+                        <button class="btn btn-primary btn-block btn-buy" data-product="1K JASTEB" data-price="1000" data-ress="50">BELI SEKARANG</button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">2K JASTEB</div>
+                        <div class="product-price">Rp 2.000</div>
+                    </div>
+                    <div class="product-body">
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> 99 RESS+</li>
+                            <li><i class="fas fa-check-circle"></i> Fresh Account</li>
+                            <li><i class="fas fa-check-circle"></i> Garansi 1x Replace</li>
+                        </ul>
+                        <button class="btn btn-primary btn-block btn-buy" data-product="2K JASTEB" data-price="2000" data-ress="99">BELI SEKARANG</button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">3K JASTEB</div>
+                        <div class="product-price">Rp 3.000</div>
+                    </div>
+                    <div class="product-body">
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> 150 RESS+</li>
+                            <li><i class="fas fa-check-circle"></i> Fresh Account</li>
+                            <li><i class="fas fa-check-circle"></i> Garansi 1x Replace</li>
+                        </ul>
+                        <button class="btn btn-primary btn-block btn-buy" data-product="3K JASTEB" data-price="3000" data-ress="150">BELI SEKARANG</button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">4K JASTEB</div>
+                        <div class="product-price">Rp 4.000</div>
+                    </div>
+                    <div class="product-body">
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> 180 RESS+</li>
+                            <li><i class="fas fa-check-circle"></i> Fresh Account</li>
+                            <li><i class="fas fa-check-circle"></i> Garansi 1x Replace</li>
+                        </ul>
+                        <button class="btn btn-primary btn-block btn-buy" data-product="4K JASTEB" data-price="4000" data-ress="180">BELI SEKARANG</button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">5K JASTEB</div>
+                        <div class="product-price">Rp 5.000</div>
+                    </div>
+                    <div class="product-body">
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> 250 RESS+</li>
+                            <li><i class="fas fa-check-circle"></i> Fresh Account</li>
+                            <li><i class="fas fa-check-circle"></i> Garansi 1x Replace</li>
+                        </ul>
+                        <button class="btn btn-primary btn-block btn-buy" data-product="5K JASTEB" data-price="5000" data-ress="250">BELI SEKARANG</button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">10K JASTEB</div>
+                        <div class="product-price">Rp 10.000</div>
+                    </div>
+                    <div class="product-body">
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> 400 RESS+</li>
+                            <li><i class="fas fa-check-circle"></i> Fresh Account</li>
+                            <li><i class="fas fa-check-circle"></i> Garansi 1x Replace</li>
+                        </ul>
+                        <button class="btn btn-primary btn-block btn-buy" data-product="10K JASTEB" data-price="10000" data-ress="400">BELI SEKARANG</button>
+                    </div>
+                </div>
+                
+                <!-- Special Friday Offer -->
+                <div class="product-card" style="position: relative;">
+                    <div class="special-badge">JUM'AT SPECIAL!</div>
+                    <div class="product-header" style="background: linear-gradient(135deg, #e84393, #fd79a8);">
+                        <div class="product-name">1K JASTEB SPESIAL</div>
+                        <div class="product-price">Rp 1.000</div>
+                    </div>
+                    <div class="product-body">
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> 155 RESS+ 🔥</li>
+                            <li><i class="fas fa-check-circle"></i> Fresh Account</li>
+                            <li><i class="fas fa-check-circle"></i> Garansi 1x Replace</li>
+                            <li><i class="fas fa-check-circle"></i> Hanya Hari Jum'at</li>
+                        </ul>
+                        <button class="btn btn-primary btn-block btn-buy" data-product="1K JASTEB SPESIAL JUM'AT" data-price="1000" data-ress="155" style="background: linear-gradient(135deg, #e84393, #fd79a8);">BELI SEKARANG</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Jasteb Calculator -->
+            <div class="calculator">
+                <h3 class="calculator-title">HITUNG RESS SESUAI KEBUTUHAN ANDA</h3>
+                <div class="calculator-input">
+                    <input type="number" id="ress-input" placeholder="Masukkan jumlah RESS yang diinginkan">
+                    <select id="ress-type">
+                        <option value="jasteb">JASTEB</option>
+                        <option value="unchek">UNCHEK</option>
+                    </select>
+                </div>
+                <div class="calculator-result" id="ress-result">
+                    Masukkan jumlah RESS untuk melihat harga
+                </div>
+                <div class="calculator-buttons">
+                    <button class="btn btn-secondary" id="btn-cancel">KEMBALI</button>
+                    <button class="btn btn-primary" id="btn-continue" disabled>LANJUT PEMBAYARAN</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Unchek Section -->
+        <div class="section tab-content" id="unchek">
+            <h2 class="section-title">UNCHEK FRESH MURAH</h2>
+            <div class="products-grid">
+                <!-- Unchek Products -->
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">3K UNCHEK</div>
+                        <div class="product-price">Rp 3.000</div>
+                    </div>
+                    <div class="product-body">
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> 15 UNCHEK</li>
+                            <li><i class="fas fa-check-circle"></i> Fresh Account</li>
+                            <li><i class="fas fa-check-circle"></i> Garansi 1x Replace</li>
+                        </ul>
+                        <button class="btn btn-primary btn-block btn-buy" data-product="3K UNCHEK" data-price="3000" data-ress="15">BELI SEKARANG</button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">5K UNCHEK</div>
+                        <div class="product-price">Rp 5.000</div>
+                    </div>
+                    <div class="product-body">
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> 25 UNCHEK</li>
+                            <li><i class="fas fa-check-circle"></i> Fresh Account</li>
+                            <li><i class="fas fa-check-circle"></i> Garansi 1x Replace</li>
+                        </ul>
+                        <button class="btn btn-primary btn-block btn-buy" data-product="5K UNCHEK" data-price="5000" data-ress="25">BELI SEKARANG</button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">10K UNCHEK</div>
+                        <div class="product-price">Rp 10.000</div>
+                    </div>
+                    <div class="product-body">
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> 40 UNCHEK</li>
+                            <li><i class="fas fa-check-circle"></i> Fresh Account</li>
+                            <li><i class="fas fa-check-circle"></i> Garansi 1x Replace</li>
+                        </ul>
+                        <button class="btn btn-primary btn-block btn-buy" data-product="10K UNCHEK" data-price="10000" data-ress="40">BELI SEKARANG</button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">15K UNCHEK</div>
+                        <div class="product-price">Rp 15.000</div>
+                    </div>
+                    <div class="product-body">
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> 60 UNCHEK</li>
+                            <li><i class="fas fa-check-circle"></i> Fresh Account</li>
+                            <li><i class="fas fa-check-circle"></i> Garansi 1x Replace</li>
+                        </ul>
+                        <button class="btn btn-primary btn-block btn-buy" data-product="15K UNCHEK" data-price="15000" data-ress="60">BELI SEKARANG</button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">20K UNCHEK</div>
+                        <div class="product-price">Rp 20.000</div>
+                    </div>
+                    <div class="product-body">
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> 80 UNCHEK</li>
+                            <li><i class="fas fa-check-circle"></i> Fresh Account</li>
+                            <li><i class="fas fa-check-circle"></i> Garansi 1x Replace</li>
+                        </ul>
+                        <button class="btn btn-primary btn-block btn-buy" data-product="20K UNCHEK" data-price="20000" data-ress="80">BELI SEKARANG</button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">30K UNCHEK</div>
+                        <div class="product-price">Rp 30.000</div>
+                    </div>
+                    <div class="product-body">
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> 100 UNCHEK</li>
+                            <li><i class="fas fa-check-circle"></i> Fresh Account</li>
+                            <li><i class="fas fa-check-circle"></i> Garansi 1x Replace</li>
+                        </ul>
+                        <button class="btn btn-primary btn-block btn-buy" data-product="30K UNCHEK" data-price="30000" data-ress="100">BELI SEKARANG</button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">40K UNCHEK</div>
+                        <div class="product-price">Rp 40.000</div>
+                    </div>
+                    <div class="product-body">
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> 150 UNCHEK</li>
+                            <li><i class="fas fa-check-circle"></i> Fresh Account</li>
+                            <li><i class="fas fa-check-circle"></i> Garansi 1x Replace</li>
+                        </ul>
+                        <button class="btn btn-primary btn-block btn-buy" data-product="40K UNCHEK" data-price="40000" data-ress="150">BELI SEKARANG</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Panel Section -->
+        <div class="section tab-content" id="panel">
+            <h2 class="section-title">PANEL PTERODACTYL</h2>
+            <div class="tabs">
+                <div class="tab active" data-panel-tab="panel">Panel</div>
+                <div class="tab" data-panel-tab="reseller">Reseller</div>
+            </div>
+            
+            <!-- Panel Products -->
+            <div class="tab-content active" id="panel-content">
+                <div class="products-grid">
+                    <div class="product-card">
+                        <div class="product-header">
+                            <div class="product-name">PANEL 1GB</div>
+                            <div class="product-price">Rp 1.000</div>
+                        </div>
+                        <div class="product-body">
+                            <ul class="product-features">
+                                <li><i class="fas fa-check-circle"></i> 1GB Storage</li>
+                                <li><i class="fas fa-check-circle"></i> Unlimited Bandwidth</li>
+                                <li><i class="fas fa-check-circle"></i> Garansi 7 Hari</li>
+                            </ul>
+                            <button class="btn btn-primary btn-block btn-buy" data-product="PANEL 1GB" data-price="1000">BELI SEKARANG</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card">
+                        <div class="product-header">
+                            <div class="product-name">PANEL 5GB</div>
+                            <div class="product-price">Rp 5.000</div>
+                        </div>
+                        <div class="product-body">
+                            <ul class="product-features">
+                                <li><i class="fas fa-check-circle"></i> 5GB Storage</li>
+                                <li><i class="fas fa-check-circle"></i> Unlimited Bandwidth</li>
+                                <li><i class="fas fa-check-circle"></i> Garansi 7 Hari</li>
+                            </ul>
+                            <button class="btn btn-primary btn-block btn-buy" data-product="PANEL 5GB" data-price="5000">BELI SEKARANG</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card">
+                        <div class="product-header">
+                            <div class="product-name">PANEL 10GB</div>
+                            <div class="product-price">Rp 10.000</div>
+                        </div>
+                        <div class="product-body">
+                            <ul class="product-features">
+                                <li><i class="fas fa-check-circle"></i> 10GB Storage</li>
+                                <li><i class="fas fa-check-circle"></i> Unlimited Bandwidth</li>
+                                <li><i class="fas fa-check-circle"></i> Garansi 7 Hari</li>
+                            </ul>
+                            <button class="btn btn-primary btn-block btn-buy" data-product="PANEL 10GB" data-price="10000">BELI SEKARANG</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card">
+                        <div class="product-header">
+                            <div class="product-name">PANEL UNLI</div>
+                            <div class="product-price">Rp 5.000</div>
+                        </div>
+                        <div class="product-body">
+                            <ul class="product-features">
+                                <li><i class="fas fa-check-circle"></i> Unlimited Storage</li>
+                                <li><i class="fas fa-check-circle"></i> Unlimited Bandwidth</li>
+                                <li><i class="fas fa-check-circle"></i> Garansi 7 Hari</li>
+                            </ul>
+                            <button class="btn btn-primary btn-block btn-buy" data-product="PANEL UNLI" data-price="5000">BELI SEKARANG</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card">
+                        <div class="product-header">
+                            <div class="product-name">PANEL UNLI PRIVATE</div>
+                            <div class="product-price">Rp 7.000</div>
+                        </div>
+                        <div class="product-body">
+                            <ul class="product-features">
+                                <li><i class="fas fa-check-circle"></i> Unlimited Storage</li>
+                                <li><i class="fas fa-check-circle"></i> Unlimited Bandwidth</li>
+                                <li><i class="fas fa-check-circle"></i> Private Panel</li>
+                                <li><i class="fas fa-check-circle"></i> Garansi 7 Hari</li>
+                            </ul>
+                            <button class="btn btn-primary btn-block btn-buy" data-product="PANEL UNLI PRIVATE" data-price="7000">BELI SEKARANG</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Reseller Panel Products -->
+            <div class="tab-content" id="reseller-content">
+                <div class="products-grid">
+                    <div class="product-card">
+                        <div class="product-header">
+                            <div class="product-name">RESSELLER PANEL</div>
+                            <div class="product-price">Rp 5.000</div>
+                        </div>
+                        <div class="product-body">
+                            <ul class="product-features">
+                                <li><i class="fas fa-check-circle"></i> Akses Reseller</li>
+                                <li><i class="fas fa-check-circle"></i> Bisa Jual Panel</li>
+                                <li><i class="fas fa-check-circle"></i> Garansi 7 Hari</li>
+                            </ul>
+                            <button class="btn btn-primary btn-block btn-buy" data-product="RESSELLER PANEL" data-price="5000">BELI SEKARANG</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card">
+                        <div class="product-header">
+                            <div class="product-name">ADMIN PANEL</div>
+                            <div class="product-price">Rp 10.000</div>
+                        </div>
+                        <div class="product-body">
+                            <ul class="product-features">
+                                <li><i class="fas fa-check-circle"></i> Akses Admin</li>
+                                <li><i class="fas fa-check-circle"></i> Bisa Jual Panel</li>
+                                <li><i class="fas fa-check-circle"></i> Garansi 7 Hari</li>
+                            </ul>
+                            <button class="btn btn-primary btn-block btn-buy" data-product="ADMIN PANEL" data-price="10000">BELI SEKARANG</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card">
+                        <div class="product-header">
+                            <div class="product-name">PT PANEL</div>
+                            <div class="product-price">Rp 20.000</div>
+                        </div>
+                        <div class="product-body">
+                            <ul class="product-features">
+                                <li><i class="fas fa-check-circle"></i> Akses PT</li>
+                                <li><i class="fas fa-check-circle"></i> Bisa Jual Panel</li>
+                                <li><i class="fas fa-check-circle"></i> Garansi 7 Hari</li>
+                            </ul>
+                            <button class="btn btn-primary btn-block btn-buy" data-product="PT PANEL" data-price="20000">BELI SEKARANG</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card">
+                        <div class="product-header">
+                            <div class="product-name">OWN PANEL</div>
+                            <div class="product-price">Rp 30.000</div>
+                        </div>
+                        <div class="product-body">
+                            <ul class="product-features">
+                                <li><i class="fas fa-check-circle"></i> Akses Owner</li>
+                                <li><i class="fas fa-check-circle"></i> Bisa Jual Panel</li>
+                                <li><i class="fas fa-check-circle"></i> Garansi 7 Hari</li>
+                            </ul>
+                            <button class="btn btn-primary btn-block btn-buy" data-product="OWN PANEL" data-price="30000">BELI SEKARANG</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- VPS Section -->
+        <div class="section tab-content" id="vps">
+            <h2 class="section-title">VPS MURAH</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">VPS 2GB</div>
+                        <div class="product-price">Rp 25.000</div>
+                    </div>
+                    <div class="product-body">
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> 2GB RAM</li>
+                            <li><i class="fas fa-check-circle"></i> 4 Core CPU</li>
+                            <li><i class="fas fa-check-circle"></i> 50GB SSD</li>
+                            <li><i class="fas fa-check-circle"></i> Unlimited Bandwidth</li>
+                        </ul>
+                        <button class="btn btn-primary btn-block btn-buy" data-product="VPS 2GB CORE 4" data-price="25000">BELI SEKARANG</button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">VPS 6GB</div>
+                        <div class="product-price">Rp 40.000</div>
+                    </div>
+                    <div class="product-body">
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> 6GB RAM</li>
+                            <li><i class="fas fa-check-circle"></i> 3 Core CPU</li>
+                            <li><i class="fas fa-check-circle"></i> 100GB SSD</li>
+                            <li><i class="fas fa-check-circle"></i> Unlimited Bandwidth</li>
+                        </ul>
+                        <button class="btn btn-primary btn-block btn-buy" data-product="VPS 6GB CORE 3" data-price="40000">BELI SEKARANG</button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">VPS 8GB</div>
+                        <div class="product-price">Rp 55.000</div>
+                    </div>
+                    <div class="product-body">
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> 8GB RAM</li>
+                            <li><i class="fas fa-check-circle"></i> 8 Core CPU</li>
+                            <li><i class="fas fa-check-circle"></i> 150GB SSD</li>
+                            <li><i class="fas fa-check-circle"></i> Unlimited Bandwidth</li>
+                        </ul>
+                        <button class="btn btn-primary btn-block btn-buy" data-product="VPS 8GB CORE 8" data-price="55000">BELI SEKARANG</button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">VPS 16GB</div>
+                        <div class="product-price">Rp 75.000</div>
+                    </div>
+                    <div class="product-body">
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> 16GB RAM</li>
+                            <li><i class="fas fa-check-circle"></i> 4 Core CPU</li>
+                            <li><i class="fas fa-check-circle"></i> 200GB SSD</li>
+                            <li><i class="fas fa-check-circle"></i> Unlimited Bandwidth</li>
+                        </ul>
+                        <button class="btn btn-primary btn-block btn-buy" data-product="VPS 16GB CORE 4" data-price="75000">BELI SEKARANG</button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">VPS 32GB</div>
+                        <div class="product-price">Rp 150.000</div>
+                    </div>
+                    <div class="product-body">
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> 32GB RAM</li>
+                            <li><i class="fas fa-check-circle"></i> 8 Core CPU</li>
+                            <li><i class="fas fa-check-circle"></i> 300GB SSD</li>
+                            <li><i class="fas fa-check-circle"></i> Unlimited Bandwidth</li>
+                        </ul>
+                        <button class="btn btn-primary btn-block btn-buy" data-product="VPS 32GB CORE 8" data-price="150000">BELI SEKARANG</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Reseller Section -->
+        <div class="section tab-content" id="reseller">
+            <h2 class="section-title">PAKET RESELLER</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">RESSELLER PANEL</div>
+                        <div class="product-price">Rp 5.000</div>
+                    </div>
+                    <div class="product-body">
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> Akses Reseller</li>
+                            <li><i class="fas fa-check-circle"></i> Bisa Jual Panel</li>
+                            <li><i class="fas fa-check-circle"></i> Garansi 7 Hari</li>
+                        </ul>
+                        <button class="btn btn-primary btn-block btn-buy" data-product="RESSELLER PANEL" data-price="5000">BELI SEKARANG</button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">ADMIN PANEL</div>
+                        <div class="product-price">Rp 10.000</div>
+                    </div>
+                    <div class="product-body">
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> Akses Admin</li>
+                            <li><i class="fas fa-check-circle"></i> Bisa Jual Panel</li>
+                            <li><i class="fas fa-check-circle"></i> Garansi 7 Hari</li>
+                        </ul>
+                        <button class="btn btn-primary btn-block btn-buy" data-product="ADMIN PANEL" data-price="10000">BELI SEKARANG</button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">PT PANEL</div>
+                        <div class="product-price">Rp 20.000</div>
+                    </div>
+                    <div class="product-body">
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> Akses PT</li>
+                            <li><i class="fas fa-check-circle"></i> Bisa Jual Panel</li>
+                            <li><i class="fas fa-check-circle"></i> Garansi 7 Hari</li>
+                        </ul>
+                        <button class="btn btn-primary btn-block btn-buy" data-product="PT PANEL" data-price="20000">BELI SEKARANG</button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">OWN PANEL</div>
+                        <div class="product-price">Rp 30.000</div>
+                    </div>
+                    <div class="product-body">
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> Akses Owner</li>
+                            <li><i class="fas fa-check-circle"></i> Bisa Jual Panel</li>
+                            <li><i class="fas fa-check-circle"></i> Garansi 7 Hari</li>
+                        </ul>
+                        <button class="btn btn-primary btn-block btn-buy" data-product="OWN PANEL" data-price="30000">BELI SEKARANG</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Payment Modal -->
+    <div class="modal" id="payment-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 class="modal-title">PEMBAYARAN</h3>
+            
+            <div id="order-summary">
+                <p>Produk: <span id="modal-product"></span></p>
+                <p>Harga: Rp <span id="modal-price"></span></p>
+                <p id="ress-summary" style="display: none;">Jumlah RESS: <span id="modal-ress"></span></p>
+            </div>
+            
+            <h4>Pilih Metode Pembayaran</h4>
+            <div class="payment-methods">
+                <div class="payment-method" data-method="qris">
+                    <i class="fas fa-qrcode"></i>
+                    <div>QRIS</div>
+                </div>
+                <div class="payment-method" data-method="dana">
+                    <i class="fas fa-wallet"></i>
+                    <div>DANA</div>
+                </div>
+                <div class="payment-method" data-method="gopay">
+                    <i class="fab fa-google-pay"></i>
+                    <div>GOPAY</div>
+                </div>
+                <div class="payment-method" data-method="ovo">
+                    <i class="fas fa-mobile-alt"></i>
+                    <div>OVO</div>
+                </div>
+                <div class="payment-method" data-method="bank">
+                    <i class="fas fa-university"></i>
+                    <div>Transfer Bank</div>
+                </div>
+                <div class="payment-method" data-method="alfamart">
+                    <i class="fas fa-store"></i>
+                    <div>Alfamart</div>
+                </div>
+            </div>
+            
+            <div class="payment-qr" id="qris-payment">
+                <img src="https://files.catbox.moe/efk1u6.jpg" alt="QRIS Payment">
+                <div class="payment-instruction">
+                    <p><strong>Instruksi Pembayaran:</strong></p>
+                    <p>1. Scan QR Code di atas menggunakan aplikasi pembayaran Anda</p>
+                    <p>2. Pastikan nominal pembayaran sesuai</p>
+                    <p>3. Setelah membayar, kirim bukti pembayaran ke WhatsApp Admin</p>
+                </div>
+            </div>
+            
+            <div class="payment-instruction" id="other-payment" style="display: none;">
+                <p>Silakan hubungi Admin melalui WhatsApp untuk instruksi pembayaran lebih lanjut:</p>
+                <a href="https://wa.me/6281374082409" class="btn btn-primary" style="margin-top: 1rem;">
+                    <i class="fab fa-whatsapp"></i> Hubungi Admin
+                </a>
+            </div>
+            
+            <div class="payment-instruction">
+                <p><strong>NOTE:</strong> Jika produk tidak masuk setelah pembayaran, segera hubungi Admin IMZYY di nomor WhatsApp: <a href="https://wa.me/6281374082409">wa.me/6281374082409</a></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Floating WhatsApp -->
+    <a href="https://wa.me/6281374082409" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">IMZYY STORE</div>
+            <p>Jasteb & Panel Murah Berkualitas</p>
+            
+            <div class="footer-contact">
+                <a href="https://wa.me/6281374082409" class="contact-item">
+                    <i class="fab fa-whatsapp"></i> +62 813-7408-2409
+                </a>
+            </div>
+            
+            <div class="footer-copyright">
+                &copy; 2023 IMZYY STORE. Developed by IMZYY.
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Loading Animation
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.querySelector('.loading-overlay').style.opacity = '0';
+                setTimeout(function() {
+                    document.querySelector('.loading-overlay').style.display = 'none';
+                }, 500);
+            }, 1500);
+        });
+        
+        // Tab Navigation
+        const navItems = document.querySelectorAll('.nav-item');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                // Remove active class from all nav items and tab contents
+                navItems.forEach(nav => nav.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked nav item
+                this.classList.add('active');
+                
+                // Show corresponding tab content
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Panel Tab System
+        const panelTabs = document.querySelectorAll('[data-panel-tab]');
+        const panelContents = document.querySelectorAll('#panel .tab-content');
+        
+        panelTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all panel tabs and contents
+                panelTabs.forEach(t => t.classList.remove('active'));
+                panelContents.forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Show corresponding content
+                const tabId = this.getAttribute('data-panel-tab');
+                document.getElementById(`${tabId}-content`).classList.add('active');
+            });
+        });
+        
+        // Calculator Logic
+        const ressInput = document.getElementById('ress-input');
+        const ressType = document.getElementById('ress-type');
+        const ressResult = document.getElementById('ress-result');
+        const btnContinue = document.getElementById('btn-continue');
+        const btnCancel = document.getElementById('btn-cancel');
+        
+        // Jasteb pricing tiers
+        const jastebTiers = [
+            { min: 1, max: 50, price: 1000 },
+            { min: 51, max: 99, price: 2000 },
+            { min: 100, max: 150, price: 3000 },
+            { min: 151, max: 180, price: 4000 },
+            { min: 181, max: 250, price: 5000 },
+            { min: 251, max: 400, price: 10000 },
+            { min: 401, max: 10000, price: Math.floor(10000 / 400) } // Price per 400 RESS for amounts above 400
+        ];
+        
+        // Unchek pricing tiers
+        const unchekTiers = [
+            { min: 1, max: 15, price: 3000 },
+            { min: 16, max: 25, price: 5000 },
+            { min: 26, max: 40, price: 10000 },
+            { min: 41, max: 60, price: 15000 },
+            { min: 61, max: 80, price: 20000 },
+            { min: 81, max: 100, price: 30000 },
+            { min: 101, max: 150, price: 40000 },
+            { min: 151, max: 10000, price: Math.floor(40000 / 150) } // Price per 150 unchek for amounts above 150
+        ];
+        
+        ressInput.addEventListener('input', calculateRess);
+        ressType.addEventListener('change', calculateRess);
+        
+        function calculateRess() {
+            const ressValue = parseInt(ressInput.value);
+            const type = ressType.value;
+            
+            if (isNaN(ressValue) || ressValue <= 0) {
+                ressResult.textContent = 'Masukkan jumlah RESS yang diinginkan';
+                btnContinue.disabled = true;
+                return;
+            }
+            
+            let tiers, productName;
+            
+            if (type === 'jasteb') {
+                tiers = jastebTiers;
+                productName = 'JASTEB';
+            } else {
+                tiers = unchekTiers;
+                productName = 'UNCHEK';
+            }
+            
+            // Check if it's Friday for special offer
+            const today = new Date();
+            const isFriday = today.getDay() === 5; // 5 is Friday
+            const specialFridayOffer = isFriday && type === 'jasteb' && ressValue <= 155;
+            
+            if (specialFridayOffer) {
+                ressResult.innerHTML = `SPESIAL JUM'AT!<br>${ressValue} RESS = Rp 1.000`;
+                btnContinue.disabled = false;
+                return;
+            }
+            
+            // Find the appropriate tier
+            let selectedTier = tiers.find(tier => ressValue >= tier.min && ressValue <= tier.max);
+            
+            if (!selectedTier) {
+                // For values above the maximum defined tier, calculate based on the last tier's price per unit
+                const lastTier = tiers[tiers.length - 1];
+                const pricePerUnit = lastTier.price;
+                const units = Math.ceil(ressValue / (type === 'jasteb' ? 400 : 150));
+                const totalPrice = units * (type === 'jasteb' ? 10000 : 40000);
+                
+                ressResult.textContent = `${ressValue} ${productName} = Rp ${totalPrice.toLocaleString()}`;
+                btnContinue.disabled = false;
+                return;
+            }
+            
+            ressResult.textContent = `${ressValue} ${productName} = Rp ${selectedTier.price.toLocaleString()}`;
+            btnContinue.disabled = false;
+        }
+        
+        btnContinue.addEventListener('click', function() {
+            const ressValue = parseInt(ressInput.value);
+            const type = ressType.value;
+            
+            if (isNaN(ressValue) || ressValue <= 0) return;
+            
+            // Check for special Friday offer
+            const today = new Date();
+            const isFriday = today.getDay() === 5;
+            const specialFridayOffer = isFriday && type === 'jasteb' && ressValue <= 155;
+            
+            let product, price;
+            
+            if (specialFridayOffer) {
+                product = `1K JASTEB SPESIAL JUM'AT (${ressValue} RESS)`;
+                price = 1000;
+            } else {
+                // Calculate regular price
+                const tiers = type === 'jasteb' ? jastebTiers : unchekTiers;
+                let selectedTier = tiers.find(tier => ressValue >= tier.min && ressValue <= tier.max);
+                
+                if (!selectedTier) {
+                    // For values above the maximum defined tier
+                    const lastTier = tiers[tiers.length - 1];
+                    const units = Math.ceil(ressValue / (type === 'jasteb' ? 400 : 150));
+                    price = units * (type === 'jasteb' ? 10000 : 40000);
+                } else {
+                    price = selectedTier.price;
+                }
+                
+                product = `${price.toLocaleString()} ${type.toUpperCase()} (${ressValue} ${type === 'jasteb' ? 'RESS' : 'UNCHEK'})`;
+            }
+            
+            // Show payment modal
+            showPaymentModal(product, price, ressValue);
+        });
+        
+        btnCancel.addEventListener('click', function() {
+            ressInput.value = '';
+            ressResult.textContent = 'Masukkan jumlah RESS untuk melihat harga';
+            btnContinue.disabled = true;
+        });
+        
+        // Payment Modal
+        const modal = document.getElementById('payment-modal');
+        const closeModal = document.querySelector('.close-modal');
+        const paymentMethods = document.querySelectorAll('.payment-method');
+        const qrisPayment = document.getElementById('qris-payment');
+        const otherPayment = document.getElementById('other-payment');
+        
+        // Buy buttons
+        const buyButtons = document.querySelectorAll('.btn-buy');
+        
+        buyButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const product = this.getAttribute('data-product');
+                const price = this.getAttribute('data-price');
+                const ress = this.getAttribute('data-ress');
+                
+                showPaymentModal(product, price, ress);
+            });
+        });
+        
+        function showPaymentModal(product, price, ress) {
+            document.getElementById('modal-product').textContent = product;
+            document.getElementById('modal-price').textContent = parseInt(price).toLocaleString();
+            
+            if (ress) {
+                document.getElementById('ress-summary').style.display = 'block';
+                document.getElementById('modal-ress').textContent = ress;
+            } else {
+                document.getElementById('ress-summary').style.display = 'none';
+            }
+            
+            modal.classList.add('active');
+        }
+        
+        closeModal.addEventListener('click', function() {
+            modal.classList.remove('active');
+        });
+        
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+        
+        paymentMethods.forEach(method => {
+            method.addEventListener('click', function() {
+                paymentMethods.forEach(m => m.classList.remove('active'));
+                this.classList.add('active');
+                
+                if (this.getAttribute('data-method') === 'qris') {
+                    qrisPayment.classList.add('active');
+                    otherPayment.style.display = 'none';
+                } else {
+                    qrisPayment.classList.remove('active');
+                    otherPayment.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
